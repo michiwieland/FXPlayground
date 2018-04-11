@@ -1,6 +1,14 @@
 # Compiled class file
 *.class
 
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
+
+# Idea
+out/
+
 # Log file
 *.log
 
