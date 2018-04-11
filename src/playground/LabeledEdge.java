@@ -86,11 +86,11 @@ public class LabeledEdge extends Group {
      */
     private void drawLabel(String labelText) {
         Binding xProperty = Bindings.createDoubleBinding(() ->
-                        curve.getStartX() + curve.getEndX() / 2,
+                        (curve.getStartX() + curve.getEndX()) / 2,
                 curve.startXProperty(), curve.endXProperty());
 
         Binding yProperty = Bindings.createDoubleBinding(() ->
-                        curve.getStartY() + curve.getEndY() / 2,
+                        (curve.getStartY() + curve.getEndY()) / 2,
                 curve.startYProperty(), curve.endYProperty());
 
         label.setText(labelText);
