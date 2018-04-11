@@ -39,24 +39,14 @@ public class LabeledEdge extends Group {
         this.startNode = startNode;
         this.endNode = endNode;
 
-        // bind listener
+        // the boundaries of the start and end node are not calculated yet.
+        // bind listener for async computation of the start and end coordinates
         startCenter.addListener(this::updateCurvePoints);
         endCenter.addListener(this::updateCurvePoints);
-
-        if (startNode.getBoundsInParent().getHeight() > 0 &&
-                startNode.getBoundsInParent().getWidth() > 0 &&
-                endNode.getBoundsInParent().getHeight() > 0 &&
-                endNode.getBoundsInParent().getWidth() > 0) {
-
-            computeEndCenterPoint(null);
-            computeStartCenterPoint(null);
-
-        } else {
-            startNode.layoutBoundsProperty()
-                    .addListener(this::computeStartCenterPoint);
-            endNode.layoutBoundsProperty()
-                    .addListener(this::computeEndCenterPoint);
-        }
+        startNode.boundsInParentProperty().addListener(
+                this::computeStartCenterPoint);
+        endNode.boundsInParentProperty().addListener(
+                this::computeEndCenterPoint);
 
         initializeComponent(labelText, directed);
     }
@@ -126,7 +116,9 @@ public class LabeledEdge extends Group {
     }
 
     private void updateCurvePoints(Observable o) {
-        if (startCenter.get() != null && endCenter.get() != null) {
+        if (startCenter.get() != null && endCenter.get() != null &&
+                startNode.getBoundsInParent().getMinY() >= 0 &&
+                endNode.getBoundsInParent().getMinY() >= 0) {
 
             Point2D startIntersection = findIntersectionPoint(startNode,
                     startCenter.get(),
@@ -143,11 +135,11 @@ public class LabeledEdge extends Group {
             curve.setEndX(endIntersection.getX());
             curve.setEndY(endIntersection.getY());
             curve.setControlX1(mid.getX());
-            curve.setControlY1(mid.getY() + 2 * startNode.getLayoutBounds()
-                    .getHeight());
+            curve.setControlY1(mid.getY()
+                    + startNode.getLayoutBounds().getHeight());
             curve.setControlX2(mid.getX());
-            curve.setControlY2(mid.getY() + 2 * startNode.getLayoutBounds()
-                    .getHeight());
+            curve.setControlY2(mid.getY()
+                    + startNode.getLayoutBounds().getHeight());
         }
     }
 

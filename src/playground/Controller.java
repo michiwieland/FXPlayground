@@ -1,7 +1,10 @@
 package playground;
 
 import javafx.fxml.FXML;
+import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
+
+import java.util.stream.Stream;
 
 public class Controller {
     @FXML
@@ -17,18 +20,23 @@ public class Controller {
     }
 
     private void fillLeftContent() {
-        Circle circle1 = new Circle(100, 300, 10);
-        Circle circle2 = new Circle(150, 300, 10);
-        Circle circle3 = new Circle(200, 300, 10);
-        Circle circle4 = new Circle(250, 300, 10);
+        Circle circle1 = new Circle();
+        Circle circle2 = new Circle();
+        Circle circle3 = new Circle();
+        Circle circle4 = new Circle();
 
-        LabeledEdge relation = new LabeledEdge("extends", circle1, circle2,
+        Stream.of(circle1, circle2, circle3, circle4).forEach(c -> c
+                .setRadius(10));
+
+        LabeledEdge relation = new LabeledEdge("A", circle1, circle2,
                 true);
-        LabeledEdge relation2 = new LabeledEdge("extends", circle1, circle3,
+        LabeledEdge relation2 = new LabeledEdge("B", circle2, circle4,
                 true);
 
-        scalePaneLeft.addChildren(relation, relation2, circle1, circle2,
-                circle3, circle4);
+        HBox container = new HBox();
+        container.getChildren().addAll(circle1, circle2, circle3, circle4);
+
+        scalePaneLeft.addChildren(container, relation, relation2);
 
     }
 
